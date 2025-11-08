@@ -211,6 +211,10 @@ Scheduled callbacks should comply with the principles of interrupt handler desig
 avoid problems resulting from I/O activity and the modification of shared data which can arise in any code
 which preempts the main program loop.
 
+As scheduled callbacks may create objects on the heap, the heap may run out of space while in the callback.
+On some ports, this leads to errors, as automatic garbage collection can't be run. Consider using
+`gc.collect()` from the main loop in order to alleviate this issue.
+
 Execution time needs to be considered in relation to the frequency with which interrupts can occur. If an
 interrupt occurs while the previous callback is executing, a further instance of the callback will be queued
 for execution; this will run after the current instance has completed. A sustained high interrupt repetition
